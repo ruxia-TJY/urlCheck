@@ -35,8 +35,13 @@ def test_connect(url,timeout):
     code = 0
     with console.status("") as s:
         s.update(f"{url}")
-        req = request.Request(url)
-        now = time.strftime("%H:%M:%S",time.localtime())
+        now = time.strftime("%H:%M:%S", time.localtime())
+        try:
+            req = request.Request(url)
+        except Exception as e:
+            console.print(f"[green][bold][{now}]\t[001][/]\t{url}")
+            code = 1
+            return code
         try:
             responese = request.urlopen(req,timeout=timeout)
             console.print(f"[green][bold][{now}]\t[{responese.status}][/]\t{url}")
@@ -73,6 +78,8 @@ class count:
     def add(self,code):
         if code == 0:
             self.result['Error'] = self.result.get('Error',0) + 1
+        elif code == 1:
+            self.result['Error-URL'] = self.result.get('Error-URL',0) + 1
         elif code == 200:
             self.result['Success'] = self.result.get('Success',0) + 1
         else:
