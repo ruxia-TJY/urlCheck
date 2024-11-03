@@ -58,7 +58,7 @@ console = Console()
 
 def test_connect(url:str,timeout:int) -> (int,str):
     headers = {'User-Agent':'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36'}
-
+    now = ""
     code = 0
     with console.status("") as s:
         s.update(f"{url}")
@@ -66,9 +66,9 @@ def test_connect(url:str,timeout:int) -> (int,str):
         try:
             req = request.Request(url,headers=headers)
         except Exception as e:
-            console.print(f"[green][bold][{now}]\t[001][/]\t{url}")
+            console.print(f"[red][bold][{now}]\t[001][/]\t{url}")
             code = 1
-            return code
+            return (code,now)
         try:
             responese = request.urlopen(req,timeout=timeout)
             console.print(f"[green][bold][{now}]\t[{responese.status}][/]\t{url}")
